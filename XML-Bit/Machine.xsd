@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="MachineSchema"
+    targetNamespace="http://tempuri.org/MachineSchema.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://tempuri.org/MachineSchema.xsd"
+    xmlns:mstns="http://tempuri.org/MachineSchema.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:element name ="root">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="source" minOccurs="1" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:all>
+              <xs:element name="inputs" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="input" minOccurs="1" maxOccurs="18">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="status" >
+                            <xs:simpleType>
+                              <xs:restriction base="xs:int">
+                                <xs:minInclusive value="0"></xs:minInclusive>
+                                <xs:maxInclusive value="1"></xs:maxInclusive>
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="counter" type="xs:long" minOccurs="0"></xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="port">
+                          <xs:simpleType>
+                            <xs:restriction base="xs:int">
+                              <xs:minInclusive value="0"></xs:minInclusive>
+                              <xs:maxInclusive value="17"></xs:maxInclusive>
+                            </xs:restriction>
+                          </xs:simpleType>
+                        </xs:attribute>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+
+              <xs:element name="outputs" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="output" minOccurs="1" maxOccurs="18">
+                      <xs:complexType>
+                        <xs:sequence>
+                         <xs:element name="status" >
+                            <xs:simpleType>
+                              <xs:restriction base="xs:int">
+                                <xs:minInclusive value="0"></xs:minInclusive>
+                                <xs:maxInclusive value="1"></xs:maxInclusive>
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+
+                        </xs:sequence>
+                        <xs:attribute name="port">
+                          <xs:simpleType>
+                            <xs:restriction base="xs:int">
+                              <xs:minInclusive value="0"></xs:minInclusive>
+                              <xs:maxInclusive value="17"></xs:maxInclusive>
+                            </xs:restriction>
+                          </xs:simpleType>
+                        </xs:attribute>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                 
+                </xs:complexType>
+              </xs:element>
+            </xs:all>
+            <xs:attribute name="Id" type="xs:string" />
+          </xs:complexType>
+
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
