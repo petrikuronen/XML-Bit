@@ -13,8 +13,9 @@ namespace XML_Bit
     {
         static void Main(string[] args)
         {
-            machine[] mm = new machine[1];//("192.168.0.1", 10, 10);
-            for(int i = 0; i < 1; i++)
+            int cnt = 5;
+            machine[] mm = new machine[cnt];//("192.168.0.1", 10, 10);
+            for(int i = 0; i < cnt; i++)
                 mm[i] = new machine("192.168.0.11"+i.ToString(), 3, 3);
             //mm[1] = new machine("192.168.0.22", 3, 3);
             Console.WriteLine(mm[0].SetPort(1, true));
@@ -78,28 +79,24 @@ namespace XML_Bit
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Häpp");
                 Console.WriteLine(ex.Message);
                 
-            }
-        
-
-       
+            }    
     
-    /******/
-    Console.ReadLine();
+            Console.ReadLine();
         }
 
-
-       static XmlNode AddNewMachine(string id, int[] port, int[] counter, XmlDocument doc, XmlNode rootNode) //XmlElement
+    
+        static XmlNode AddNewMachine(string id, int[] port, int[] counter, XmlDocument doc, XmlNode rootNode)
         {
-            /****/
+            // lägg till maskin
             XmlNode sourceNode = doc.CreateElement("source");
             XmlAttribute sourceAttribute = doc.CreateAttribute("id");
             sourceAttribute.Value = id;
             sourceNode.Attributes.Append(sourceAttribute);
             rootNode.AppendChild(sourceNode);
 
+            // lägg till portar
             XmlNode inputsNode = doc.CreateElement("inputs");
             sourceNode.AppendChild(inputsNode);
 
@@ -126,6 +123,8 @@ namespace XML_Bit
             sourceNode.AppendChild(inputsNode);
             return doc;
         }
+
+        /* Validera xml:en */
         static void ValidationEventHandler(object sender, ValidationEventArgs e)
         {
             switch (e.Severity)
