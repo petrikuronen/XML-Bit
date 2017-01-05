@@ -10,7 +10,7 @@ namespace XML_Bit
     {
         public machine(string _id, int _ports, int _counters)
         {
-            _mid = _id;
+             _mid = _id;
             _setports(_ports);
             _setcounters(_counters);
         }
