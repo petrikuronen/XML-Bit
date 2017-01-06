@@ -15,7 +15,7 @@ namespace XML_Bit
             _setcounters(_counters);
         }
         // sätt en port           
-        public bool SetPort(int _port, bool _status)
+        public bool SetPort(int _port, int _status)
         {
             if (_port > ports || _port < 0)
                 return false;
@@ -23,9 +23,16 @@ namespace XML_Bit
             return true;
         }
         //hämta en port
-        public bool GetPort(int _port)
+        public int GetPort(int _port)
         {
-            return _lport[_port];
+            try
+            {
+                return _lport[_port];
+            }
+            catch
+            {
+                return -1;
+            }
         }
         //hämta alla portar
         public int[] getAllPorts()
@@ -33,7 +40,7 @@ namespace XML_Bit
             int[] ig = new int[_lport.Count()];
             for (int i = 0; i < _lport.Count(); i++)
             {
-                ig[i] = (_lport[i] == true) ? 1 : 0;
+                ig[i] = (_lport[i] == 1) ? 1 : 0;
             }
             return ig;
             //return string.Join("", _lport.ToArray());
@@ -44,7 +51,7 @@ namespace XML_Bit
             _mport = _ports;
             for (int i = 0; i < _ports; i++)
             {
-                _lport.Add(false);
+                _lport.Add(0);
 
             }
         }
@@ -102,7 +109,7 @@ namespace XML_Bit
         private int _mport = 1;
         private int _mcounters = 1;
         //
-        private List<bool> _lport = new List<bool>();
+        private List<int> _lport = new List<int>();
         private List<int> _lcounter = new List<int>();
         //
         public string id { get { return _mid; } set { _mid = id; } }

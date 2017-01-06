@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.XPath;
+using System.Xml.Serialization;
+using System.Diagnostics;
 
 namespace XML_Bit
 {
@@ -38,27 +41,52 @@ namespace XML_Bit
         /*
  * Editera XML med ny data *
  */
-        public XmlNode updateMachine(machine m, XmlDocument doc, XmlNode rootNode = null)
-        {
-            //XmlNodeList mNodes = doc.SelectNodes("/root/source[@id='"+ m.id+"']");
-            XmlNode mId = doc.SelectSingleNode("/root/source[@id='" + m.id + "']");
-            XmlNodeList mPorts = mId.SelectNodes("inputs/input");
-            String tmp = "";
-            foreach (XmlNode mPort in mPorts)
+        public XmlDocument updateMachine(machine m, XmlDocument doc)
+        {            
+            /*XmlReaderSettings settings = new XmlReaderSettings();
+            settings.Schemas.Add("http://tempuri.org/MachineSchema.xsd", "Machine.xsd");
+            settings.ValidationType = ValidationType.Schema;*/
+
+            XPathNavigator navigator = doc.CreateNavigator();
+            navigator.MoveToFirst();
+
+            navigator.MoveToChild("root", String.Empty);// "http://tempuri.org/MachineSchema.xsd") == true)
+            navigator.MoveToChild("source", String.Empty);// "http://tempuri.org/MachineSchema.xsd");
+
+            do
             {
-                XmlAttributeCollection xa = mPort.Attributes;
+                if (navigator.HasAttributes)
+                {
+                    if (navigator.GetAttribute("id", String.Empty) == m.id)
+                    {
+                        XPathNavigator port = navigator.Clone();
+                        port.MoveToChild("inputs", String.Empty); //"http://tempuri.org/MachineSchema.xsd");
+                        port.MoveToChild("input", String.Empty); // "http://tempuri.org/MachineSchema.xsd");
+                        Console.WriteLine(port.Value);
 
-                tmp = "Port: " + xa.Item(0).Value;
-                int iPort = Int32.Parse(xa.Item(0).Value);
-                 XmlNode oldPort = mPort.SelectSingleNode("status");
-                 mPort.SelectSingleNode("status").InnerText = m.GetPort(iPort).ToString();
-                tmp += ", Counter: " + mPort.SelectSingleNode("counter").InnerText;
-                Console.WriteLine(tmp);
-                doc.ReplaceChild(mPort, oldPort);
+                        if (port.HasAttributes)
+                        {
+                            int iport = 1;
+                            do
+                            {
+                                if (port.GetAttribute("port", String.Empty) == iport.ToString())
+                                {
+                                    XPathNavigator statusnav = port.Clone();
+                                    statusnav.MoveToChild("status", String.Empty);
+                                    statusnav.SetValue(m.GetPort(iport - 1).ToString());
+
+                                    statusnav.MoveToNext("counter", string.Empty);
+                                    statusnav.SetValue(m.GetCounter(iport - 1).ToString());
+                                    iport++;
+                                }
+                            } while (port.MoveToNext("input", string.Empty));
+
+                            navigator.MoveToFirstAttribute();
+                        }
+                    }
+                }
             }
-
-            // save the XmlDocument back to disk
-            //doc.Save(@"Machine.xml");
+            while (navigator.MoveToNext("source", string.Empty));
 
             return doc;
         }
