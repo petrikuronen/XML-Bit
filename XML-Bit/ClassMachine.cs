@@ -8,26 +8,26 @@ namespace XML_Bit
 {
     class machine
     {
-        public machine(string _id, int _ports, int _counters)
+        public machine(string id, int ports, int counters)
         {
-             _mid = _id;
-            _setports(_ports);
-            _setcounters(_counters);
+             _mid = id;
+            _setports(ports);
+            _setcounters(counters);
         }
         // sätt en port           
-        public bool SetPort(int _port, int _status)
+        public bool SetPort(int port, int status)
         {
-            if (_port > ports || _port < 0)
+            if (port > ports || port < 0)
                 return false;
-            _lport[_port] = _status;
+            _lport[port] = status;
             return true;
         }
         //hämta en port
-        public int GetPort(int _port)
+        public int GetPort(int port)
         {
             try
             {
-                return _lport[_port];
+                return _lport[port];
             }
             catch
             {
@@ -43,7 +43,6 @@ namespace XML_Bit
                 ig[i] = (_lport[i] == 1) ? 1 : 0;
             }
             return ig;
-            //return string.Join("", _lport.ToArray());
         }
         //lägg till portar
         private void _setports(int _ports)
@@ -55,29 +54,21 @@ namespace XML_Bit
 
             }
         }
-        // lägg ill räknarna
-        private void _setcounters(int _counters)
-        {
-            _mcounters = _counters;
-            for (int i = 0; i < _counters; i++)
-            {
-                _lcounter.Add(0);
-            }
-        }
+        
         // hämta en räknare
-        public int GetCounter(int _counter)
+        public int GetCounter(int counter)
         {
-            return _lcounter[_counter];
+            return _lcounter[counter];
         }
         //räkna upp
-        public void CountUp(int _counter)
+        public void CountUp(int counter)
         {
-            _lcounter[_counter]++;
+            _lcounter[counter]++;
         }
         //nolla rn räknare
-        public void ResetCounter(int _counter)
+        public void ResetCounter(int counter)
         {
-            _lcounter[_counter] = 0;
+            _lcounter[counter] = 0;
         }
         //nolla alla räknare
         public void ResetAllCounters()
@@ -86,11 +77,11 @@ namespace XML_Bit
                 _lcounter[i] = 0;
         }
         //sätt en räknare
-        public bool SetCounter(int _counter, int _value)
+        public bool SetCounter(int counter, int value)
         {
-            if (_counter > counters || _counter < 0)
+            if (counter > counters || counter < 0)
                 return false;
-            _lcounter[_counter] = _value;
+            _lcounter[counter] = value;
             return true;
         }
         // visa alla räknare
@@ -102,6 +93,18 @@ namespace XML_Bit
                 ic[i] = _lcounter[i];
             }
             return ic;
+        }
+
+/* PRIVATE*/
+
+        // lägg ill räknarna
+        private void _setcounters(int _counters)
+        {
+            _mcounters = _counters;
+            for (int i = 0; i < _counters; i++)
+            {
+                _lcounter.Add(0);
+            }
         }
 
         //Standard constructor
