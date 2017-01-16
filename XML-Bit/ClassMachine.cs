@@ -8,11 +8,23 @@ namespace XML_Bit
 {
     class machine
     {
-        public machine(string id, int ports, int counters)
+        public machine(string id = "127.0.0.1", int ports = 1, int counters = 1)
         {
-             _mid = id;
+            _mid = id;
             _setports(ports);
             _setcounters(counters);
+            for(int i = 0; i < ports-1;i++)
+                SetPort(i, 0);
+            for (int i = 0; i < counters - 1; i++)
+                SetCounter(i, 0);
+        }
+
+        public void Init(string id, int ports, int counters)
+        {
+            _mid = id;
+            _setports(ports);
+            _setcounters(counters);
+
         }
         // sätt en port           
         public bool SetPort(int port, int status)
@@ -95,7 +107,8 @@ namespace XML_Bit
             return ic;
         }
 
-/* PRIVATE*/
+        
+        /* PRIVATE*/
 
         // lägg ill räknarna
         private void _setcounters(int _counters)

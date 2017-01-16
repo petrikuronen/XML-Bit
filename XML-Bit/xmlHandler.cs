@@ -14,14 +14,14 @@ namespace XML_Bit
     {
         public XmlDocument doc = new XmlDocument();
 
-        public XmlDocument CreateXml(machine[] mm)
+        public XmlDocument CreateXml( List<machine> mm)
         {
             XmlNode docNode = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
             doc.AppendChild(docNode);
             XmlNode rootNode = doc.CreateElement("root");
             doc.AppendChild(rootNode);
 
-            for (int i = 0; i < mm.Length; i++)
+            for (int i = 0; i < mm.Count; i++)
                 AddNewMachine(mm[i].id, mm[i].getAllPorts(), mm[i].getAllCounters(), doc, rootNode);
 
             XmlWriterSettings setting = new XmlWriterSettings();
@@ -62,7 +62,6 @@ namespace XML_Bit
                         XPathNavigator port = navigator.Clone();
                         port.MoveToChild("inputs", String.Empty); //"http://tempuri.org/MachineSchema.xsd");
                         port.MoveToChild("input", String.Empty); // "http://tempuri.org/MachineSchema.xsd");
-                        Console.WriteLine(port.Value);
 
                         if (port.HasAttributes)
                         {
@@ -77,6 +76,8 @@ namespace XML_Bit
 
                                     statusnav.MoveToNext("counter", string.Empty);
                                     statusnav.SetValue(m.GetCounter(iport - 1).ToString());
+
+                                    //Console.WriteLine("{3} Writing Id: {0}, portvalue: {1}, counter {2}", m.id, m.GetPort(iport -1), m.GetCounter(iport -1), logTime());
                                     iport++;
                                 }
                             } while (port.MoveToNext("input", string.Empty));
@@ -131,5 +132,7 @@ namespace XML_Bit
             sourceNode.AppendChild(inputsNode);
             return doc;
         }
+
+       
     }
 }

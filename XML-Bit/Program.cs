@@ -10,6 +10,8 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Xml.XPath;
 using System.Xml.Linq;
+using Newtonsoft.Json;
+using S7.Net;
 
 namespace XML_Bit
 {
@@ -18,14 +20,16 @@ namespace XML_Bit
         static void Main(string[] args)
         {
             
-            int cnt = 5;
-            machine[] mm = new machine[cnt];//("192.168.0.1", 10, 10);
-            for (int i = 0; i < cnt; i++)
+            List<machine> mm = new List<machine>();
+            settings_json js = new settings_json();
+            mm = js.loadsettings(mm);
+          
+            foreach(machine setting in mm)
             {
-                mm[i] = new machine( "192.168.0.11"+i.ToString(), 3, 3);
+                Console.WriteLine("{3} Loaded settings: id:{0}, portd: {1}, counters: {2}", setting.id, setting.ports, setting.counters, logTime());
             }
 
-            Console.WriteLine(mm[0].SetPort(0, 1));
+            Console.WriteLine("SetPort: {0}", mm[0].SetPort(0, 1));
             mm[0].SetCounter(0, 23003);
             //mm[1].SetCounter(1, 550022);
             Console.WriteLine("machine id: {0}, ports: {1}", mm[0].id, mm[0].ports);
@@ -33,9 +37,6 @@ namespace XML_Bit
             mm[0].CountUp(1);
             Console.WriteLine("machine id: {0}, counter: {1}", mm[0].id, mm[0].GetCounter(1));
 
-            Console.WriteLine(mm[0].getAllPorts());
-            //mm[0].ResetAllCounters();
-            Console.WriteLine(mm[0].getAllCounters());
             Console.WriteLine("Antal maskiner {0}", mm.Count());
 
             xmlHandler xDoc = new xmlHandler();
@@ -43,6 +44,7 @@ namespace XML_Bit
             xDoc.saveAsFile();
             Console.Write(doc.OuterXml.ToString());
 
+            
             /******/
             try
             {
@@ -82,6 +84,11 @@ namespace XML_Bit
             doc = xDoc.updateMachine(mm[0], doc);
             doc = xDoc.updateMachine(mm[1], doc);
             doc.Save("Machine2.xml");
+            
+            
+
+            js.writesettings("setings.json", mm);
+            
             Console.ReadLine();
         }
 
@@ -97,7 +104,15 @@ namespace XML_Bit
                     Console.WriteLine("Warning {0}", e.Message);
                     break;
             }
-
         }
+
+        static string logTime()
+        {
+            DateTime dt = new DateTime();
+            dt = DateTime.Now;
+            return dt.ToString("yyyy-MM-dd HH:mm:ss.ms");
+        }
+
+
     }
 }
